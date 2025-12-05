@@ -7,21 +7,21 @@
 
 void outputString(char inputString[MAXLENGTH]){
     int i = 0;
-    while(i != MAXLENGTH){
+    while(inputString[i] != '\0'){
         putchar(inputString[i]);
         ++i;
     }
 }
 
 void copyString(char inputString[MAXLENGTH], char copyString[MAXLENGTH]){
-    for(int i=0; i<MAXLENGTH; ++i){
-        copyString[i] = inputString[i];
-    }
+    int i = 0;
+    while((copyString[i] = inputString[i]) != '\0')
+        ++i;
 }
 
-int getString(char string[MAXLENGTH], int *flagEOF){
+int readLine(char string[MAXLENGTH], int *flagEOF){
     int c, length = 0;
-    while((c = getchar()) != EOF){
+    while((c = getchar()) != EOF && length < MAXLENGTH - 1){
         string[length] = c;
         length++;
         if(c == '\n')
@@ -34,9 +34,9 @@ int getString(char string[MAXLENGTH], int *flagEOF){
 
 int main(){
     int c, length = 0, maxlength = 0, flagEOF = FALSE;
-    char string[MAXLENGTH] = {' '}, maxString[MAXLENGTH];
+    char string[MAXLENGTH] = {0}, maxString[MAXLENGTH] = {0};
     while(!flagEOF){
-        length = getString(string, &flagEOF);
+        length = readLine(string, &flagEOF);
         if(length > maxlength){
             maxlength = length;
             copyString(string, maxString);
