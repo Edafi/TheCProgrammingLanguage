@@ -18,6 +18,6 @@ int main(){
     int c, length = 0, maxlength = 0;
     char string[MAXLENGTH] = {' '}, maxString[MAXLENGTH];
     while(){
-
+        a
     }
 }
