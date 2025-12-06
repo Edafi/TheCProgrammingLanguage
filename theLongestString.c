@@ -5,43 +5,41 @@
 #define TRUE 1
 #define FALSE 0
 
-void outputString(char inputString[MAXLENGTH]){
-    int i = 0;
-    while(inputString[i] != '\0'){
-        putchar(inputString[i]);
-        ++i;
-    }
+void outputString(char inputString[]){
+    //int i = 0;
+    //while(inputString[i] != '\0'){
+    //    putchar(inputString[i]);
+    //    ++i;
+    //}
+    printf("%s", inputString);
 }
 
-void copyString(char inputString[MAXLENGTH], char copyString[MAXLENGTH]){
+void copyString(char inputString[], char copyString[]){
     int i = 0;
     while((copyString[i] = inputString[i]) != '\0')
         ++i;
 }
 
-int readLine(char string[MAXLENGTH], int *flagEOF){
+int readLine(char string[], int limit){
     int c, length = 0;
-    while((c = getchar()) != EOF && length < MAXLENGTH - 1){
+    while((c = getchar()) != EOF && length < limit - 1){
         string[length] = c;
         length++;
         if(c == '\n')
             break;
     }
-    if(c == EOF)
-        *flagEOF = TRUE;
     return length;
 }
 
 int main(){
-    int c, length = 0, maxlength = 0, flagEOF = FALSE;
+    int c, length = 0, maxlength = 0;
     char string[MAXLENGTH] = {0}, maxString[MAXLENGTH] = {0};
-    while(!flagEOF){
-        length = readLine(string, &flagEOF);
+    while((length = readLine(string, MAXLENGTH)) > 0){
         if(length > maxlength){
             maxlength = length;
             copyString(string, maxString);
         }
     }
-    printf("The longest with \\n: %d characters\n", maxlength);
+    printf("\nThe longest with \\n: %d characters\n", maxlength);
     outputString(maxString);
 }
