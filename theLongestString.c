@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include <stdlib.h>
 
-#define MINSPACE 2                                                                                  // Я думаю, что 2 или 3 достаточно, так как на конце массива чаров будет \n и \0,
+#define MINSPACE 5                                                                                  // Я думаю, что 2 или 3 достаточно, так как на конце массива чаров будет \n и \0,
                                                                                                     // но \n входит в длину строки, поэтому он считается. Остается одина свободная ячейка.
 #define DELTACAPACITY 20                                                                            // Не знаю сколько добавлять ячеек памяти к новому массиву. Не хочу слишком много,
                                                                                                     // пустого пространства, а слишком мало, чтобы не занимать такты.
@@ -49,27 +49,22 @@ void outputString(char inputString[]){
     printf("%s", inputString);
 }
 
-void copyString(char inputString[], char copyString[]){
+void copyString(char inputString[], char copyString[], int limit){
     int i = 0;
-    while((copyString[i] = inputString[i]) != '\0')
+    while((copyString[i] = inputString[i]) != '\0' && i != limit)
         ++i;
 }
 
-int readLine(char **ptrString, int *ptrCapacity){
+int readLine(char **ptrString, char **ptrMaxString, int *ptrCapacity){
     int c, length = 0, capacity = *ptrCapacity;
-    char *string = *ptrString;
+    char *string = *ptrString, *maxString = *ptrMaxString;
     while((c = getchar()) != EOF){
         string = checkStringCapacity(string, ptrCapacity, length);
+        maxString = checkStringCapacity(maxString, ptrCapacity, length);
         string[length] = c;
         length++;
-        if(c == '\n'){
-            if(length + MINSPACE >= capacity){
-                capacity += MINSPACE;
-                *ptrCapacity = capacity;
-                string = changeCapacityDynamicArray_char(string, capacity, sizeof(char));
-            }
+        if(c == '\n')
             break;
-        }
     }
     string[length] = '\0';
     *ptrString = string;
@@ -83,11 +78,15 @@ int main(){
     string = makeDynamicArray_char(capacity, sizeof(char));       
     maxString = makeDynamicArray_char(capacity, sizeof(char));
     // Передаю адрес capacity, чтобы  динамически его поменять в функции readline, если длина строки будет больше неообходимого.
-    while((length = readLine(&string, &capacity)) > 0){
+    while((length = readLine(&string, &maxString, &capacity)) > 0){
+        if(length + MINSPACE >= capacity){
+            capacity += DELTACAPACITY;
+            maxString = changeCapacityDynamicArray_char(maxString, capacity, sizeof(char));
+        }
         if(length > maxlength){
             maxlength = length;
-            maxString = changeCapacityDynamicArray_char(maxString, capacity, sizeof(char));
-            copyString(string, maxString);
+            maxString = changeCapacityDynamicArray_char(maxString, maxlength, sizeof(char));
+            copyString(string, maxString, maxlength);
         }
     }
 
