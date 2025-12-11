@@ -3,8 +3,21 @@
 #define TRUE 1
 #define FALSE 0
 
-long double binPow(long long base, long long power){
-    long long answer = 1;
+long double binPow_double(long long base, long long power){
+    long double answer = 1;
+    while(power > 0){
+        if(power & 1){
+            answer *= base;
+            power--;
+        }
+        base *= base;
+        power >>= 1;
+    }
+    return answer;
+}
+
+long long binPow_int(long long base, long long power){
+    int answer = 1;
     while(power > 0){
         if(power & 1){
             answer *= base;
