@@ -41,12 +41,15 @@ char* squeeze(char* string, char set[], int *pointerCapacity){
 }
 
 void printString(char *string){
-    //int i = 0;
-    //char c = string[i];
-    //while(c != '\0'){
-    //    prin
-    //}
-    printf("%s", string);
+    printf("%s\n", string);
+}
+
+int any(char* string, char set[]){
+    for(int i = 0; string[i] != '\0'; ++i)
+        for(int j = 0; j < ASCIISYMBOLS; ++j)
+            if(set[j] == 1 && string[i] == (char)j)
+                return i;
+    return -1;
 }
 
 int main(){
@@ -55,9 +58,6 @@ int main(){
     editableString = makeDynamicArray_char(editableCapacity, sizeof(char));       
     deleteCharString = makeDynamicArray_char(deleteCapacity, sizeof(char));
     // Передаю адрес capacity, чтобы  динамически его поменять в функции readline, если длина строки будет больше неообходимого.
-    //while((editableLength = readLine(&editableString, &editableCapacity)) > 0 && (deleteLength = readLine(&deleteCharString, &deleteCapacity)) > 0){
-    //    ;
-    //}
 
     editableLength = readLine(&editableString, &editableCapacity);
     deleteLength = readLine(&deleteCharString, &deleteCapacity);
@@ -65,9 +65,12 @@ int main(){
     char asciiSymbolsSet[ASCIISYMBOLS] = {0};
     completeSymbolSet(deleteCharString, asciiSymbolsSet);
     free(deleteCharString);
+
+    int firstSymbolOccurrence = any(editableString, asciiSymbolsSet);
+
     editableString = squeeze(editableString, asciiSymbolsSet, &editableCapacity);
     printString(editableString);
-
+    printf("%d\n", firstSymbolOccurrence);
 
     free(editableString);
 }
