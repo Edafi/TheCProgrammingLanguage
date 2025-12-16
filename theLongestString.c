@@ -1,5 +1,5 @@
 #include <linux/limits.h>
-#include<stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #define MINSPACE 2                                                                                  // Я думаю, что 2 или 3 достаточно, так как на конце массива чаров будет \n и \0,
