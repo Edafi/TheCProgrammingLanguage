@@ -13,12 +13,21 @@ void printBinary(unsigned int n) {
     printf("\n");
 }
 
+int invert(unsigned int x, unsigned int p, unsigned int n){
+    unsigned int copiedSides = (((~0 << (p+1)) | ~(~0 << (p+1-n))) & x);
+    unsigned int copiedCenter = (~((~0 << (p+1)) | ~(~0 << (p+1-n))) & x);
+    unsigned int oneCenter =  ~((~0 << (p+1)) | ~(~0 << (p+1-n)));
+    return (~copiedCenter & oneCenter) | copiedSides;
+}
+
 int main(){
     unsigned int x, p, n, y;
     scanf("%d %d %d %d", &x, &p, &n, &y);
     printBinary(x);
     printBinary(y);
-    printBinary(setbits(x, p, n, y));
-    x = setbits(x, p, n, y);
+    //printBinary(setbits(x, p, n, y));
+    //x = setbits(x, p, n, y);
+    printBinary(invert(x, p, n));
+    x = invert(x, p, n);
     printf("%d \n", x);
 }
