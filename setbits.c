@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+//setbits copy last n bits of value y and put them into value x from p (included) position to p-n (not included).
 int setbits(int x, int p, int n, int y){
     return (((~0 << (p+1)) | ~(~0 << (p+1-n))) & x) | (~(~0 << n) & y) << (p+1-n);
 }
