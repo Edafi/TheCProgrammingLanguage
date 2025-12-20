@@ -2,32 +2,45 @@
 #include <stdio.h>
 
 //setbits copy last n bits of value y and put them into value x from p (included) position to p-n (not included).
-int setbits(int x, int p, int n, int y){
-    return (((~0 << (p+1)) | ~(~0 << (p+1-n))) & x) | (~(~0 << n) & y) << (p+1-n);
+unsigned int setbits(unsigned int x, unsigned int p, unsigned int n, unsigned int y){
+    return (((~0U << (p+1)) | ~(~0U << (p+1-n))) & x) | (~(~0U << n) & y) << (p+1-n);
 }
 
 void printBinary(unsigned int n) {
-    for (int i = (sizeof(unsigned int) * 8) - 1; i >= 0; i--) {
-        putchar((n & (1 << i)) ? '1' : '0');
+    for (int i = (sizeof(n) * 8) - 1; i >= 0; i--) {
+        putchar((n & (1U << i)) ? '1' : '0');
     }
     printf("\n");
 }
 
-int invert(unsigned int x, unsigned int p, unsigned int n){
-    unsigned int copiedSides = (((~0 << (p+1)) | ~(~0 << (p+1-n))) & x);
-    unsigned int copiedCenter = (~((~0 << (p+1)) | ~(~0 << (p+1-n))) & x);
-    unsigned int oneCenter =  ~((~0 << (p+1)) | ~(~0 << (p+1-n)));
+unsigned int invert(unsigned int x, unsigned int p, unsigned int n){
+    unsigned int copiedSides = (((~0U << (p+1)) | ~(~0 << (p+1-n))) & x);
+    unsigned int copiedCenter = (~((~0U << (p+1)) | ~(~0 << (p+1-n))) & x);
+    unsigned int oneCenter =  ~((~0U << (p+1)) | ~(~0 << (p+1-n)));
     return (~copiedCenter & oneCenter) | copiedSides;
+}
+
+unsigned int rightrot(unsigned int x, unsigned int n){
+    return (x>>n) | ((~(~0U << n) & x) << (sizeof(x) * 8 - n));
+}
+
+unsigned int leftrot(unsigned int x, unsigned int n){
+    //printf("X is %u, N is %d\n", x, n);
+    //unsigned int temp = ((~(~0U >> n)) ); 
+    //printBinary(temp);
+    return (x<<n) | ((~(~0U >> n) & x) >> (sizeof(x) * 8 - n));
 }
 
 int main(){
     unsigned int x, p, n, y;
-    scanf("%d %d %d %d", &x, &p, &n, &y);
+    scanf("%u %u %u %u", &x, &p, &n, &y);
     printBinary(x);
-    printBinary(y);
+    //printBinary(y);
     //printBinary(setbits(x, p, n, y));
     //x = setbits(x, p, n, y);
-    printBinary(invert(x, p, n));
-    x = invert(x, p, n);
-    printf("%d \n", x);
+    //printBinary(invert(x, p, n));
+    //x = invert(x, p, n);
+    x = leftrot(x, n);
+    printBinary(x);
+    printf("%u \n", x);
 }
