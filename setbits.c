@@ -25,22 +25,38 @@ unsigned int rightrot(unsigned int x, unsigned int n){
 }
 
 unsigned int leftrot(unsigned int x, unsigned int n){
-    //printf("X is %u, N is %d\n", x, n);
-    //unsigned int temp = ((~(~0U >> n)) ); 
-    //printBinary(temp);
     return (x<<n) | ((~(~0U >> n) & x) >> (sizeof(x) * 8 - n));
+}
+
+int bitCountEdited(unsigned int x){
+    int bits = 0;
+    for (; x!=0; x &= x-1)
+            bits++;
+    return bits;
+}
+
+int bitCount(unsigned int x){
+    int bits = 0;
+    for (; x!=0; x >>= 1)
+        if(x & 01)
+            bits++;
+    return bits;
 }
 
 int main(){
     unsigned int x, p, n, y;
-    scanf("%u %u %u %u", &x, &p, &n, &y);
+    //scanf("%u %u %u %u", &x, &p, &n, &y);
+    scanf("%u", &x);
     printBinary(x);
+    printf("%d %d\n", bitCount(x), bitCountEdited(x));
+
     //printBinary(y);
     //printBinary(setbits(x, p, n, y));
     //x = setbits(x, p, n, y);
+    
     //printBinary(invert(x, p, n));
     //x = invert(x, p, n);
-    x = leftrot(x, n);
-    printBinary(x);
-    printf("%u \n", x);
+    
+    //x = leftrot(x, n);
+    //printf("%u \n", x);
 }
