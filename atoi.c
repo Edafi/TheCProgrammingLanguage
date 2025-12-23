@@ -1,0 +1,25 @@
+#include <ctype.h>
+#include "dynamic_array.h"
+#include <stdio.h>
+
+/* Makes a string into an integer */
+int atoi(char string[]){
+    int i = 0, value = 0, sign;
+
+    while(isspace(string[i]))
+        ++i;
+    sign = (string[i] == '-')? -1 : 1;
+    if(string[i] == '+' || string[i] == '-')
+        ++i;
+    for(; isdigit(string[i]); ++i)
+        value = 10 * value + (string[i] - '0');
+    return sign * value;
+}
+
+//int main(){
+//    int capacity = 25, value = 0;
+//    char *string = makeDynamicArray_char(capacity, sizeof(char));
+//    if(readLine( &string, &capacity))
+//        value = atoi(string);
+//    printf("%d\n", value);
+//}
