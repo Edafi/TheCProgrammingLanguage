@@ -23,7 +23,7 @@ void expand(char input[], char expanded[]){
             else
                 expanded[j++] = input[i++];
         }
-        else if(input[i] != '-'){
+        else{
             expanded[j++] = input[i++];
         }
     }
