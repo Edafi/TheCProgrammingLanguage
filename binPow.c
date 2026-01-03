@@ -1,10 +1,11 @@
-#include <stdio.h>
-
 #define TRUE 1
 #define FALSE 0
 
-long double binPow_double(long long base, long long power){
-    long double answer = 1;
+long double binPow_double(long double base, long long power){
+    int negativeFlag = 0;
+    long double answer = 1.0;
+    negativeFlag = (power < 0)? 1 : 0;
+    power = (power < 0)? power * (-1) : power;
     while(power > 0){
         if(power & 1){
             answer *= base;
@@ -13,7 +14,7 @@ long double binPow_double(long long base, long long power){
         base *= base;
         power >>= 1;
     }
-    return answer;
+    return (negativeFlag == 0)? answer : 1/answer;
 }
 
 long long binPow_int(long long base, long long power){
