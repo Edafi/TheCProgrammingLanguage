@@ -58,3 +58,38 @@ int readLine(char **ptrString, int *ptrCapacity){
 void outputString(char inputString[]){
     printf("%s", inputString);
 }
+
+double* makeDynamicArray_double(int capacity, int typeSize){
+    double* pointer = (double*)calloc(capacity, typeSize);
+    if(pointer == NULL){
+        printf("Failed to allocate memory for dynamic array");
+        exit(0);
+    }
+    else
+        return pointer;
+}
+
+double* checkArrayCapacity_double (double array[], int *ptrCapacity, int length){
+    int capacity = *ptrCapacity;
+    if(length + MINSPACE >= capacity){
+        capacity += DELTACAPACITY;
+        *ptrCapacity = capacity;
+        array = changeCapacityDynamicArray_double(array, capacity, sizeof(char));
+    }
+    else if(capacity - length - MINSPACE > DELTACAPACITY){
+        capacity -= DELTACAPACITY;
+        *ptrCapacity = capacity;
+        array = changeCapacityDynamicArray_double(array, capacity,  sizeof(char));
+    }
+    return array;
+}
+
+double* changeCapacityDynamicArray_double(double *pointer, int capacity, int typeSize){
+        pointer = (double *)realloc(pointer, capacity * typeSize);
+        if(pointer == NULL){
+            printf("Failed to allocate memory for dynamic array");
+            exit(0);
+        }
+        else
+            return pointer;
+    }

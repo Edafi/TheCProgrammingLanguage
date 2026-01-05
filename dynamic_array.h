@@ -13,4 +13,8 @@ void outputString(char inputString[]);
 char* makeDynamicArray_char(int capacity, int typeSize);
 char* changeCapacityDynamicArray_char(char *ptr, int capacity, int typeSize);
 
+double* checkArrayCapacity_double (double array[], int *ptrCapacity, int length);
+double* makeDynamicArray_double(int capacity, int typeSize);
+double* changeCapacityDynamicArray_double(double *ptr, int capacity, int typeSize);
+
 #endif
