@@ -18,45 +18,55 @@ int main(){
     double temp;
     char *string = makeDynamicArray_char(stringCapacity, sizeof(char));
     readLine(&string, &stringCapacity);
-    // TO DO: Надо замутить вложенный динамический массив строк, чтобы можно было
-    // разделить string по пробелам и залить микро строчки в массив - массив указателей поидее. 
+    initStack(); 
     while ((type = getoperation(string)) != EOF){
         switch (type){
             case NUMBER :{
-                push(atof(string));
+                push(atof(getBuffer()));
+                freeBuffer();
                 break;
             }
             case '+' :{
                 push(pop() + pop());
+                freeBuffer();
                 break;
             }
             case '*' :{
                 push(pop() * pop());
+                freeBuffer();
                 break;
             }
             case '-' :{
                 temp = pop();
                 push (pop() - temp);
+                freeBuffer();
                 break;
             }
             case '/' :{
                 temp = pop();
                 if(temp != 0.0f)
                     push(pop() / temp);
-                else
+                else{
                     printf("Error - Division by zero\n");
-                break;
-            }
-            case '\n' :{
-                printf("\t%.8g\n", pop());
+                    freeStack();
+                    freeBuffer();
+                    exit(0);
+                }
+                freeBuffer();
                 break;
             }
             default :{
                 printf("Error - Unknown command %s\n", string);
+                freeBuffer();
+                freeStack();
+                exit(0);
                 break;
             }
         }
     }
     free(string);
+    printf("%.8g\n", pop());
+    freeStack();
+    freeBuffer();
     return 0;
 }
