@@ -72,6 +72,12 @@ int getoperation(char *string){
     initBuffer();
     while((character = string[stringIndex] ) == ' ' || character == '\t' || character == '\n')
         stringIndex++;
+    if((character == '+' || character == '-') && isdigit(string[stringIndex + 1])){
+        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        buffer[bufferIndex++] = character;
+        character = string[stringIndex + 1];
+        stringIndex++;
+    }
     if(isdigit(character))
         while(isdigit(character = string[stringIndex])){
             checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);

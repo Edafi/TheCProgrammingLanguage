@@ -55,6 +55,26 @@ int main(){
                 freeBuffer();
                 break;
             }
+            case '%' :{
+                /*
+                a%b = r
+                a/b = n
+                a = b*n + r
+                */
+                int tempB = (int) pop(), tempA = (int) pop(), value;
+                value = (tempA % tempB < 0 && tempA != tempB)? tempA - tempB * (tempA/tempB - 1) : tempA % tempB;
+                printf("%d %d\n", tempA, tempB);
+                if(tempA != 0.0f)
+                    push(value);
+                else{
+                    printf("Error - Division by zero\n");
+                    freeStack();
+                    freeBuffer();
+                    exit(0);
+                }
+                freeBuffer();
+                break;
+            }
             default :{
                 printf("Error - Unknown command %s\n", string);
                 freeBuffer();
