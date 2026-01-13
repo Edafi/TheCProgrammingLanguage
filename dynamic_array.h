@@ -17,4 +17,8 @@ double* checkArrayCapacity_double (double array[], int *ptrCapacity, int length)
 double* makeDynamicArray_double(int capacity, int typeSize);
 double* changeCapacityDynamicArray_double(double *ptr, int capacity, int typeSize);
 
+char** checkPointerArrayCapacity_char (char **array, int *ptrCapacity, int length);
+char** makePointerArray_char (int capacity, int typeSize);
+char** changeCapacityPointerArray_char (char **array, int capacity, int typeSize);
+
 #endif

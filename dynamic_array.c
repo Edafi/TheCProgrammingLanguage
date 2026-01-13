@@ -85,11 +85,46 @@ double* checkArrayCapacity_double (double array[], int *ptrCapacity, int length)
 }
 
 double* changeCapacityDynamicArray_double(double *pointer, int capacity, int typeSize){
-        pointer = (double *)realloc(pointer, capacity * typeSize);
-        if(pointer == NULL){
-            printf("Failed to allocate memory for dynamic array");
-            exit(0);
-        }
-        else
-            return pointer;
+    pointer = (double *)realloc(pointer, capacity * typeSize);
+    if(pointer == NULL){
+        printf("Failed to allocate memory for dynamic array");
+        exit(0);
     }
+    else
+        return pointer;
+}
+
+char** makePointerArray_char(int capacity, int typeSize){
+    char** pointer = (char**) calloc(capacity, typeSize);
+    if(pointer == NULL){
+        printf("Failed to allocate memory for dynamic array");
+        exit(0);
+    }
+    else
+        return pointer;
+}
+
+char** checkPointerArrayCapacity_char (char **array, int *ptrCapacity, int length){
+    int capacity = *ptrCapacity;
+    if(length + MINSPACE >= capacity){
+        capacity += DELTACAPACITY;
+        *ptrCapacity = capacity;
+        array = changeCapacityPointerArray_char(array, capacity, sizeof(char));
+    }
+    else if(capacity - length - MINSPACE > DELTACAPACITY){
+        capacity -= DELTACAPACITY;
+        *ptrCapacity = capacity;
+        array = changeCapacityPointerArray_char(array, capacity,  sizeof(char));
+    }
+    return array;
+}
+
+char** changeCapacityPointerArray_char (char **array, int capacity, int typeSize){
+    array = (char **)realloc(array, capacity * typeSize);
+    if(array == NULL){
+        printf("Failed to allocate memory for dynamic array");
+        exit(0);
+    }
+    else
+        return array;
+}

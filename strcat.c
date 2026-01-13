@@ -6,7 +6,7 @@ void strcat_SELFMADE (char *string, char *copy){
     for(; *string; string++)
         ;
     if(*string == '\0')
-        while((*string++ = *copy++) != '\0')
+        while((*string++ = *copy++))
             ;
     else
         printf("Something went wrong. strcat_SELFMADE");
