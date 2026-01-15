@@ -42,6 +42,7 @@ int readLines(char *lineptr[], int maxlines){
         }
         else{
             char *pointer_char = makeDynamicArray_char(capacity, sizeof(char));
+            //char** pointer_char = &string;
             strcpy_SELFMADE(string, pointer_char);
             lineptr[nlines++] = pointer_char;
         }
