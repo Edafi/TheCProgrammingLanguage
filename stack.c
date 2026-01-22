@@ -5,7 +5,6 @@
 #include <ctype.h>
 
 #define STACKLENGHT 100
-#define NUMBER '0'
 
 int stackIndex = 0, stackCapacity = STACKLENGHT + MINSPACE;
 double *stack = NULL;
@@ -41,12 +40,13 @@ double pop(void){
     }
     else {
         printf("Error - stack is empty\n");
-        return 0.0;
+        exit(0);
     }
 }
 
 char *buffer = NULL;
 int bufferCapacity = CAPACITY, bufferIndex = 0;
+
 void initBuffer(void){
     extern char *buffer;
     buffer = makeDynamicArray_char(bufferCapacity, sizeof(char));
@@ -75,22 +75,20 @@ int getoperation(char *string){
     if((character == '+' || character == '-') && isdigit(string[stringIndex + 1])){
         checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
         buffer[bufferIndex++] = character;
-        character = string[stringIndex + 1];
-        stringIndex++;
+        character = string[stringIndex++];
     }
     if(isdigit(character))
-        while(isdigit(character = string[stringIndex])){
+        while(isdigit(character = string[stringIndex++])){
             checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
             buffer[bufferIndex++] = character;
-            stringIndex++;
         }
     if(character == '.'){
+        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
         buffer[bufferIndex++] = character;
         stringIndex++;
-        while(isdigit(character = string[stringIndex])){
+        while(isdigit(character = string[stringIndex++])){
             checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
             buffer[bufferIndex++] = character;
-            stringIndex++;
         }
     }
     if(isspace(character)){
@@ -98,8 +96,47 @@ int getoperation(char *string){
         buffer[bufferIndex++] = '\0';
         return NUMBER;
     }
-    if(character == '\n' || character == EOF || character == '\0')
+    if(character == EOF || character == '\n' || character == '\0')
         return EOF;
     stringIndex++;
+    return character;
+}
+
+int getoperation_argv(char *string){
+    extern int bufferCapacity, bufferIndex;
+    extern char *buffer;
+
+    bufferIndex = 0;
+    int character;
+    initBuffer();
+    while((character = *string ) == ' ' || character == '\t' || character == '\n')
+        string++;
+    if((character == '+' || character == '-') && isdigit( *(string + 1) )){
+        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        buffer[bufferIndex++] = character;
+        character = *string++;
+    }
+    if(isdigit(character))
+        while(isdigit(character = *string++)){
+            checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+            buffer[bufferIndex++] = character;
+        }
+    if(character == '.'){
+        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        buffer[bufferIndex++] = character;
+        string++;
+        while(isdigit(character = *string++)){
+            checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+            buffer[bufferIndex++] = character;
+        }
+    }
+    if(character == '\0'){
+        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        buffer[bufferIndex++] = '\0';
+        return NUMBER;
+    }
+    if(character == EOF || character == '\n' || character == '\0')
+        return EOF;
+    string++;
     return character;
 }
