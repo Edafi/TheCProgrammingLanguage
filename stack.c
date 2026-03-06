@@ -73,26 +73,26 @@ int getoperation(char *string){
     while((character = string[stringIndex] ) == ' ' || character == '\t' || character == '\n')
         stringIndex++;
     if((character == '+' || character == '-') && isdigit(string[stringIndex + 1])){
-        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
         buffer[bufferIndex++] = character;
         character = string[stringIndex++];
     }
     if(isdigit(character))
         while(isdigit(character = string[stringIndex++])){
-            checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+            checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
             buffer[bufferIndex++] = character;
         }
     if(character == '.'){
-        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
         buffer[bufferIndex++] = character;
         stringIndex++;
         while(isdigit(character = string[stringIndex++])){
-            checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+            checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
             buffer[bufferIndex++] = character;
         }
     }
     if(isspace(character)){
-        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
         buffer[bufferIndex++] = '\0';
         return NUMBER;
     }
@@ -112,26 +112,26 @@ int getoperation_argv(char *string){
     while((character = *string ) == ' ' || character == '\t' || character == '\n')
         string++;
     if((character == '+' || character == '-') && isdigit( *(string + 1) )){
-        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
         buffer[bufferIndex++] = character;
         character = *string++;
     }
     if(isdigit(character))
         while(isdigit(character = *string++)){
-            checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+            checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
             buffer[bufferIndex++] = character;
         }
     if(character == '.'){
-        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
         buffer[bufferIndex++] = character;
         string++;
         while(isdigit(character = *string++)){
-            checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+            checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
             buffer[bufferIndex++] = character;
         }
     }
     if(character == '\0'){
-        checkStringCapacity(buffer, &bufferCapacity, bufferIndex + 1);
+        checkCapacityDynamicArray_char(buffer, &bufferCapacity, bufferIndex + 1);
         buffer[bufferIndex++] = '\0';
         return NUMBER;
     }

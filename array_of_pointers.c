@@ -34,14 +34,14 @@ char *alloc(int);
 
 int readLines(char *lineptr[], int maxlines){
     int length, nlines, capacity = MAXLEN;
-    char *string = makeDynamicArray_char(capacity, sizeof(char*));
+    char *string = makeDynamicArray_char(capacity, sizeof(char *));
     nlines = 0;
     while( (length = readLine(&string, &capacity)) > 0){
         if(nlines >= MAXLINES){ //like a lot of lines 
            return -1;
         }
         else{
-            char *pointer_char = makeDynamicArray_char(capacity, sizeof(char*));
+            char *pointer_char = makeDynamicArray_char(capacity, sizeof(char *));
             //char** pointer_char = &string;
             strcpy_SELFMADE(string, pointer_char);
             lineptr[nlines++] = pointer_char;

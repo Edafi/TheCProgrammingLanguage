@@ -9,7 +9,7 @@ void escape (char *string, char **pointerCopy, int *copyCapacity){
     char *copy = *pointerCopy;
     while((c = string[i]) != '\0'){
         i++;
-        copy = checkStringCapacity(copy, copyCapacity, j + MINSPACE);
+        copy = checkCapacityDynamicArray_char(copy, copyCapacity, j + MINSPACE);
         *pointerCopy = copy;
         switch (c){
             case '\t':{
@@ -78,7 +78,7 @@ void escape (char *string, char **pointerCopy, int *copyCapacity){
             }
         }
     }
-    copy = checkStringCapacity(copy, copyCapacity, j + MINSPACE);
+    copy = checkCapacityDynamicArray_char(copy, copyCapacity, j + MINSPACE);
     copy[j] = '\0';
 }
 
@@ -87,7 +87,7 @@ void unescape (char *string, char **pointerCopy, int *copyCapacity){
     char *copy = *pointerCopy;
     while((c = string[i]) != '\0'){
         i++;
-        copy = checkStringCapacity(copy, copyCapacity, j + MINSPACE);
+        copy = checkCapacityDynamicArray_char(copy, copyCapacity, j + MINSPACE);
         *pointerCopy = copy;
         if(c == '\\'){
             switch (string[i]){
@@ -156,7 +156,7 @@ void unescape (char *string, char **pointerCopy, int *copyCapacity){
         else
             copy[j++] = c;
     }
-    copy = checkStringCapacity(copy, copyCapacity, j + MINSPACE);
+    copy = checkCapacityDynamicArray_char(copy, copyCapacity, j + MINSPACE);
     copy[j] = '\0';
 }
 

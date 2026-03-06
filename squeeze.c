@@ -36,7 +36,7 @@ char* squeeze(char* string, char set[], int *pointerCapacity){
             string[j++] = string[i];
     }
     string[j] = '\0';
-    string = checkStringCapacity(string, pointerCapacity, j);
+    string = checkCapacityDynamicArray_char(string, pointerCapacity, j);
     return string;
 }
 

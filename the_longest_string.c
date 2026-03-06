@@ -35,7 +35,7 @@ MAKE_DYNAMIC_ARRAY(char)
 CHANGE_CAPACITY_DYNAMIC_ARRAY(int)
 CHANGE_CAPACITY_DYNAMIC_ARRAY(char)
 
-char* checkStringCapacity (char string[], int *ptrCapacity, int length){
+char* checkCapacityDynamicArray_char (char string[], int *ptrCapacity, int length){
     int capacity = *ptrCapacity;
     if(length + MINSPACE >= capacity){
         capacity += DELTACAPACITY;
@@ -59,8 +59,8 @@ int readLine(char **ptrString, char **ptrMaxString, int *ptrCapacity){
     int c, length = 0, capacity = *ptrCapacity;
     char *string = *ptrString, *maxString = *ptrMaxString;
     while((c = getchar()) != EOF){
-        string = checkStringCapacity(string, ptrCapacity, length);
-        maxString = checkStringCapacity(maxString, ptrCapacity, length);
+        string = checkCapacityDynamicArray_char(string, ptrCapacity, length);
+        maxString = checkCapacityDynamicArray_char(maxString, ptrCapacity, length);
         string[length] = c;
         length++;
         if(c == '\n')
