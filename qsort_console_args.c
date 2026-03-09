@@ -3,6 +3,7 @@
 #include "strcpy.c"
 #include "strcmp.c"
 #include "dynamic_array.h"
+#include "numcmp.c"
 
 #define MAXLINES 5000
 #define MAXLEN 1000
@@ -55,7 +56,7 @@ void quickSort(void *pointerArray[], int left, int right, int (*comp) (void *, v
 }
 
 void swap(void *array[], int i, int j){
-    char *temp;
+    void *temp;
     temp = array[i];
     array[i] = array[j];
     array[j] = temp;
