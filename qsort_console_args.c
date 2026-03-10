@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include "strcpy.c"
 #include "strcmp.c"
 #include "dynamic_array.h"
@@ -10,32 +9,66 @@
 char *g_stringArray[MAXLINES];
 
 int readLines (char *ptrLine[], int nlines);
-void writeLines (char *ptrLine[], int nlines);
-
-/*
-TO DO:
-    1.  Массив ptrLines является массивом указателей на строки.
-        Реализовать создание, изминение размера и удаление динамического массива, а так же запись и чтение сторок из него.
-    2.  Реализовать алгоритм сортировки строк в функции qsort_SELFMADE.
-*/
+void writeLines (char *ptrLine[], int nlines, int reverse);
 
 void quickSort(void *pointerArray[], int left, int right, int (*comp) (void *, void *));
 int numcmp(char *, char *);
 
 int main(int argc, char *argv[]){
     int nlines;
-    int numeric = 0;
+    int numeric = 0, reverse = 0, lower = 0;
+    int letter, exit = 0;
 
-    if (argc > 1 && strcmp (argv[1], "-n") == 0)
-        numeric = 1;
-    if ( (nlines = readLines(g_stringArray, MAXLINES)) >=0 ){
-        quickSort((void **) g_stringArray, 0, nlines - 1, (int (*) (void*, void*)) (numeric ? numcmp : strcmp_SELFMADE));
-        writeLines(g_stringArray, nlines);
-        return 0;
+    while (--argc > 0 && (*++argv)[0] == '-')
+        while (letter = *++argv[0])
+            switch (letter) {
+                case 'r':
+                    reverse = 1;
+                    break;
+                case 'n':
+                    numeric = 1;
+                    break;
+                case 'f':
+                    lower = 1;
+                    break;
+                default:
+                    printf("find: illegal option %c\n", letter);
+                    exit = 1;
+                    break;
+            }
+    
+    if(exit == 1){
+        printf("Usage: qsort_console_args [OPTION] [SORTING ELEMENTS]\n");
+        printf("-r                                 Sorting in reverse.\n");
+        printf("-n                                 Sorting numbers, using atof.\n");
+        printf("-f                                 Converting and sorting text with all letters to lowercase.\n");
     }
     else{
-        printf("Input too big for sorting");
-        return 1;
+        /*
+        TO DO:
+                1. Написать еще одну реализацию функции strcmp_deafult с имплементацией приравнивания строчных и прописных букв.
+                2. Реализовать использование различных функции в зависимости от включеных флагов (не забыть, что сортировка по флагу -n и обычная не должны совмещаться) 
+        */
+        /*  Занимается typecasting для фуннкций   */
+        int (*pointerFunction) (void *, void *);
+        if(numeric)
+            pointerFunction = (int (*) (void *, void *)) numcmp;
+        else if(lower)
+            pointerFunction = (int (*) (void *, void *)) strcmp_lower;
+        else
+            pointerFunction = (int (*) (void *, void *)) strcmp_default;
+        
+
+        if ( (nlines = readLines(g_stringArray, MAXLINES)) >=0 ){
+            //quickSort((void **) g_stringArray, 0, nlines - 1, (int (*) (void*, void*)) (numeric ? numcmp : strcmp_SELFMADE));
+            quickSort((void **) g_stringArray, 0, nlines - 1, pointerFunction);  
+            writeLines(g_stringArray, nlines, reverse);
+            return 0;
+        }
+        else{
+            printf("Error: input is too big for sorting.");
+            return 1;
+        }
     }
 }
 
@@ -80,11 +113,12 @@ int readLines(char *lineptr[], int maxlines){
     return nlines;
 }
 
-void writeLines(char *lineptr[], int nlines){
+void writeLines(char *lineptr[], int nlines, int reverse){
     printf("\n");
-    while(nlines-- > 0){
-       printf("%s", *lineptr++);
-    }
-    //for(int i = 0; i < nlines; i++)
-    //    printf("%s\n", lineptr[i]);
+    if(reverse)
+        while(nlines-- > 0)
+            printf("%s", lineptr[nlines]);    
+    else
+        while(nlines-- > 0)
+            printf("%s", *lineptr++);
 }
