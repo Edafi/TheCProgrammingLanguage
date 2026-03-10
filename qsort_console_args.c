@@ -50,7 +50,7 @@ void quickSort(void *pointerArray[], int left, int right, int (*comp) (void *, v
     for (i = left+1; i<= right; i++)
         if ( (*comp) (pointerArray[i], pointerArray[left]) <0)
             swap(pointerArray, ++last, i);
-    swap(pointerArray, left, right);
+    swap(pointerArray, left, last);
     quickSort(pointerArray, left, last-1, comp);
     quickSort(pointerArray, last+1, right, comp);
 }

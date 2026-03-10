@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 /* numcmp - сравнение строк s1 и s2 по числовым значениям*/
 int numcmp(char *left, char *right){
@@ -6,9 +7,9 @@ int numcmp(char *left, char *right){
     valueL = atof(left);
     valueR = atof(right);
     if(valueL < valueR)
-        return -1;
+       return -1;
     else if(valueL == valueR)
-        return 0;
+       return 0;
     else
-        return 1;
+       return 1;
 }
