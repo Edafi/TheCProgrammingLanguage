@@ -21,12 +21,12 @@ void dcl(void);
 void dirdcl(void);
 int gettoken(void);
 
-int tokentype;
-char token[MAXTOKEN];           // Тип последнего токена
-char name[MAXTOKEN];            // Последний введенный токен
-char datatype[MAXTOKEN];        // Тип идентификатора 
-char out[1000];                 // Строка результата
-                                // Токен - имя переменной, круглая скобка или квадратная скобка. 
+int tokentype;                  // Тип последнего токена
+char token[MAXTOKEN];           // Последний введенный токен
+char name[MAXTOKEN];            // Тип идентификатора
+char datatype[MAXTOKEN];        // Строка результата 
+char out[1000];                 // Токен - имя переменной, круглая скобка или квадратная скобка.
+                                 
 
 int main(void){
     while (gettoken() != EOF){
@@ -43,7 +43,7 @@ int main(void){
 // dcl - Синтактический анализ объявления
 void dcl(void){
     int ns;
-    for (ns = 0; gettoken() == '*')
+    for (ns = 0; gettoken() == '*'; )
         ns++;
     dirdcl();
     while (ns-- > 0)
@@ -86,6 +86,26 @@ int gettoken(void){
         if ((c = getch ()) == ')'){
             strcpy(token, "()");
             return tokentype = PARENS;
+        } 
+        else {
+            ungetch(c);
+            return tokentype = '(';
         }
+    } 
+    else if (c == '['){
+        for (*pointer++ = c; (*pointer++ = getch()) != ']' ; )
+            ;
+        *pointer = '\0';
+        return tokentype = BRACKETS;
+    } 
+    else if (isalpha(c)){
+        for (*pointer++ = c; isalnum( c = getch()); )
+            *pointer++ = c;
+        *pointer = '\0';
+        ungetch(c);
+        return tokentype = NAME; 
+    }
+    else {
+        return tokentype = c;
     }
 }
