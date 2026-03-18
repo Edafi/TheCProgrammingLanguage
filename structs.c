@@ -2,15 +2,14 @@
 #include <ctype.h>
 #include <string.h>
 
-#define KEYS 31
 #define MAXLENGTH 100
 
 struct keyword {
-	char* word;
+	char *word;
 	int count;
 };
 
-struct keyword words_array[KEYS]={
+struct keyword array_keywords[]={
 	{"auto", 0},
 	{"break", 0},
 	{"case", 0},
@@ -49,20 +48,27 @@ int getword (char *, int);
 int binsearch (char *, struct keyword *, int);
 
 int main(){
-	int n;
+	int n, keywords = sizeof(array_keywords) / sizeof(struct keyword);
 	char word[MAXLENGTH];
 	while (getword(word, MAXLENGTH) != EOF){	
 		if (isalpha (word[0]))
-			if ( (n = binsearch(word, words_array, KEYS)) >= 0)
-		      		words_array[n].count++;	
+			if ( (n = binsearch(word, array_keywords, keywords)) >= 0)
+		      		array_keywords[n].count++;	
 	}
-	for (n = 0; n < KEYS; n++)
-		if (words_array[n].count > 0)
-			printf("%s count is\t%d", words_array[n].word, words_array[n].count);
+	for (n = 0; n < keywords; n++)
+		if (array_keywords[n].count > 0){
+			int count = 0;
+			while(array_keywords[n].word[count] != '\0')
+				count++;
+			if (count >= 8)
+				printf("%s\tcount is\t%d\n", array_keywords[n].word, array_keywords[n].count);
+			else
+				printf("%s\t\tcount is\t%d\n", array_keywords[n].word, array_keywords[n].count);
+		}
 	return 0;
 }
 
-int binsearch (char* word, struct keyword* array, int n){
+int binsearch (char *word, struct keyword *array, int n){
 	int cond;
 	int low, high, mid;
 	low = 0;
@@ -77,4 +83,46 @@ int binsearch (char* word, struct keyword* array, int n){
 			return mid;
 	}
 	return -1;
+}
+
+int getword (char *word, int lim){
+	int c, getch (void);
+	void ungetch (int);
+	char *pointer = word;
+
+	while (isspace (c = getch()) )
+		;
+	if(c != EOF)
+		*pointer++ = c;
+	if (!isalpha (c)){
+		*pointer = '\0';
+		return c;
+	}
+	for ( ; --lim > 0; pointer++){
+		if (!isalnum (*pointer = getch())){
+			ungetch (*pointer);
+			break;
+		}
+	}
+	*pointer = '\0';
+	return word[0];
+}
+
+#define BUFFSIZE 100
+int buff[BUFFSIZE] = {' '};
+int buffp = -1;
+
+int getch(void){
+  	if (buffp >= 0) {
+    	return buff[buffp--];
+  	}
+  	else
+    	return getchar();
+}
+
+void ungetch(int c){
+	if (buffp >= 0)
+		printf("ungetch: no character to un-get\n");
+	else
+    	buff[buffp++] = c;
 }
