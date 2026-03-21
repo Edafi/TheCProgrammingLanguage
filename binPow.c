@@ -1,5 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #define TRUE 1
 #define FALSE 0
+#define DIGITLENGHT 10
 
 long double binPow_double(long double base, long long power){
     int negativeFlag = 0;
@@ -17,8 +21,8 @@ long double binPow_double(long double base, long long power){
     return (negativeFlag == 0)? answer : 1/answer;
 }
 
-long long binPow_int(long long base, long long power){
-    int answer = 1;
+unsigned long long binPow_int(long long base, long long power){
+    unsigned long long  answer = 1;
     while(power > 0){
         if(power & 1){
             answer *= base;
@@ -30,16 +34,14 @@ long long binPow_int(long long base, long long power){
     return answer;
 }
 
-//int main(){
-//    int state = TRUE;
-//    long long base = {0}, power = {0};
-//    while (state == TRUE){
-//        scanf("%lld %lld", &base, &power);
-//        if(base == EOF || power == EOF){
-//            state = FALSE;
-//            break;
-//        }
-//        else
-//            printf("%lld\n", binPow(base, power));
-//    }
-//}
+int main(){
+    int state = TRUE;
+    unsigned long long base = {0}, power = {0};
+    char baseS[DIGITLENGHT] = {'\0'}, powerS[DIGITLENGHT] = {'\0'};
+    while (strcmp(baseS, "end") != 0 || strcmp(powerS, "end") != 0){
+        scanf("%s %s", baseS, powerS);
+        base = atoi(baseS);
+        power = atoi(powerS);
+        printf("%lld\n", binPow_int(base, power));
+    }
+}
