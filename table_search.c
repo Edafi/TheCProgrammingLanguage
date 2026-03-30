@@ -66,5 +66,6 @@ void print_hashtable(void){
 int main(){
 	struct nlist *pi = install("pi", "3.141592");
 	struct nlist *e = install("e", "2.1828");
-  	 print_hashtable();	
+	struct nlist *pa = install("pa", "It's a potograph inside a photograph");
+  	print_hashtable();	
 }
