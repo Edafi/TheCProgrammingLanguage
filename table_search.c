@@ -63,7 +63,7 @@ void print_hashtable(void){
 	}
 }
 
-void undef(char *name){
+void undef(char *name){	
 	struct nlist *element = (struct nlist *) calloc(1, sizeof(struct nlist *));
 	if ((element = lookup(name)) != NULL){
 		printf("Have found the element %s\n", name);
@@ -83,6 +83,16 @@ void undef(char *name){
 		printf("Haven't found the element %s\n", name);
 }
 
+/*
+ * TO DO:
+ * 	1.	Maybe add some polymorphism to undef function. I don't really know how, I have thoughts about
+*		void pointers and second parametr, whic would choose whitch type first param is, but this solution
+*		doesn't guarantee an user mistake in type choosing by user himself.
+*	2.  Implement a deconstructor for structs. It's a joke to free them by hands in main. I tried to
+*		free them in undef function, but it's not the direct pointers, so free doesn't address to correct
+*		address of pointer. 
+*/
+
 int main(){
 	struct nlist *pi = install("pi", "3.141592");
 	struct nlist *e = install("e", "2.1828");
@@ -92,6 +102,12 @@ int main(){
 	struct nlist *aaq = install("aaq", "aaq value");
   	print_hashtable();
 	//printf("%s\n", hashTable[hash("aaq")] -> name);
-	undef("aaq");
+	undef("eeeeee");
 	print_hashtable();
+	free(pi);
+	free(e);
+	free(pa);
+	free(eeeeee);
+	free(eeeeeee);
+	free(aaq);
 }
