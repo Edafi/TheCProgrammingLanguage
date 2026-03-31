@@ -63,9 +63,35 @@ void print_hashtable(void){
 	}
 }
 
+void undef(char *name){
+	struct nlist *element = (struct nlist *) calloc(1, sizeof(struct nlist *));
+	if ((element = lookup(name)) != NULL){
+		printf("Have found the element %s\n", name);
+		unsigned short hashValue = hash(name);
+		element = hashTable[hashValue];
+		struct nlist *next = (struct nlist *) malloc(sizeof(struct nlist *));
+		for (next = element->nextElement; element->nextElement != NULL && strcmp(next->name, name) != 0 && strcmp(element->name, name) != 0; element = next, next = next -> nextElement)
+			printf("Element is %s\n", element -> name);
+		if (next == NULL)
+			hashTable[hashValue] = NULL;
+		else if (strcmp(next->name, name) == 0)
+			element->nextElement = next->nextElement;
+		else
+			hashTable[hashValue] = next;
+	}
+	else
+		printf("Haven't found the element %s\n", name);
+}
+
 int main(){
 	struct nlist *pi = install("pi", "3.141592");
 	struct nlist *e = install("e", "2.1828");
 	struct nlist *pa = install("pa", "It's a potograph inside a photograph");
-  	print_hashtable();	
+	struct nlist *eeeeee = install("eeeeee", "pee-pee poo-poo");
+	struct nlist *eeeeeee = install("eeeeeee", "poo-pee pee-poo");
+	struct nlist *aaq = install("aaq", "aaq value");
+  	print_hashtable();
+	//printf("%s\n", hashTable[hash("aaq")] -> name);
+	undef("aaq");
+	print_hashtable();
 }
