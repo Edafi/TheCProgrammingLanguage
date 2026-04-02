@@ -8,10 +8,17 @@ union U_test{
 	char *sval;
 };
 
-typedef struct point{
+typedef struct point {
 	double x;
 	double y;
 } Point;
+
+typedef struct flags {
+	unsigned int is_keyword : 1;
+	unsigned int is_extern : 1;
+	unsigned int is_static : 1;
+	unsigned int is_tested : 32;
+} BitFlags;
 
 int main(){
 	union U_test un;
@@ -24,4 +31,6 @@ int main(){
 	printf("%d\n", un);
 	Point dot1 = {12.5, -5.85};
 	printf("Point cords: x = %f, y = %f\n", dot1.x, dot1.y);
+	BitFlags bitFlag = {0};
+	printf("size in bytes is %d\n", sizeof(bitFlag));
 }
