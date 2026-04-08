@@ -1,5 +1,5 @@
 #include <string.h>
-
+#include "reverse.h"
 /* reverse: reverses the string s. Argument is string s*/
 
 void reverse(char string[]){

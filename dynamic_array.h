@@ -1,5 +1,5 @@
-#ifndef DYNAMIC_ARRAY_
-#define DYNAMIC_ARRAY_
+#ifndef DYNAMICARRAY
+#define DYNAMICARRAY
 
 #define CAPACITY 20
 #define MINSPACE 3                                                                                  // Я думаю, что 2 или 3 достаточно, так как на конце массива чаров будет \n и \0,

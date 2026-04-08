@@ -23,7 +23,7 @@ char* changeCapacityDynamicArray_char(char *ptr, int capacity, int typeSize){
             return ptr;
     }
 
-char* checkCapacityDynamicArray_char (char string[], int *ptrCapacity, int length){
+char* checkCapacityDynamicArray_char (char string[], int *ptrCapacity, int length){			// strlen(string). I don't understand why i used lenght as a parametr
     int capacity = *ptrCapacity;
     if(length + MINSPACE >= capacity){
         capacity += DELTACAPACITY;

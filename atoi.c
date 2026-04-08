@@ -1,9 +1,8 @@
 #include <ctype.h>
-#include "dynamic_array.h"
 #include <stdio.h>
-
+#include "atoi.h"
 /* Makes a string into an integer */
-int atoi(char string[]){
+int atoi_sm(char *string){
     int i = 0, value = 0, sign;
 
     while(isspace(string[i]))
