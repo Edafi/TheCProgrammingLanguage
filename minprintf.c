@@ -73,6 +73,6 @@ int main(void){
 	strcpy(string, "Hello World");
 	
 	int i_test = 2133;
-	double d_test = 13.2;
+	double d_test = -13.2;
 	minprintf("Testing double: %2f\n", d_test);
 }

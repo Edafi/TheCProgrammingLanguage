@@ -40,7 +40,12 @@ char *ftoa(double input, char *output, int precision){
 	// between integer part and fraction part of float point digit.
 	
 	output = changeCapacityDynamicArray_char(output, capacity, sizeof(char *));
-	strcpy(output, s_integer);
+	*output = '\0';
+	if (sign < 0){
+		*output = '-';
+		*++output = '\0';
+	}
+	strcat(output, s_integer);
 	strcat(output, ".");
 	strcat(output, s_fraction);
 	return output;
