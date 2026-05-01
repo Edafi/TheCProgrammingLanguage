@@ -28,7 +28,7 @@ int main(){
 	un.ival = 10;
 	//printf("%s\n", un.sval);		// We can use only freeshly assigment variable in union
 	//								// This would not work
-	printf("%d\n", un);
+	printf("%d\n", un.ival);
 	Point dot1 = {12.5, -5.85};
 	printf("Point cords: x = %f, y = %f\n", dot1.x, dot1.y);
 	BitFlags bitFlag = {0};

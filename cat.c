@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 // cat: output files in a row in terminal
 int main(int argc, char *argv[]) {
@@ -35,5 +36,5 @@ void filecopy(FILE *input_pointer, FILE *output_pointer) {
 	int c;
 	while ( (c = getc(input_pointer)) != EOF)
 		putc(c, output_pointer);
-	//if (output_pointer != stdout)
+	//putc('\n', output_pointer);
 }

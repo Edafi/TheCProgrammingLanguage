@@ -60,6 +60,7 @@ void minprintf(char *format, ...) {
 			break;
 		}
 	}
+	va_end(ap);
 }
 
 void putstring (char *string) {
