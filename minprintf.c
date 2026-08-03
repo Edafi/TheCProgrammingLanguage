@@ -14,7 +14,10 @@ void putstring (char *string);
 void minprintf(char *format, ...) {
 	int capacity = 100;
 
-	va_list ap;
+	va_list ap;             // va_list is the type for funtion arguments 
+                            // (char *format, ->...<- here). It allows us 
+                            // to input not defined amount of  parameters 
+                            // into function and work with them.
 	char *string, *s_value, *s_precision;
 	int i_value, precision = 4;
 	double d_value;
@@ -22,13 +25,15 @@ void minprintf(char *format, ...) {
 	s_value = makeDynamicArray_char(capacity, sizeof(char *));
 	s_precision = makeDynamicArray_char(capacity, sizeof(char *));
 
-	va_start(ap, format); 	// Set the ap to the arg after format
+	va_start(ap, format); 	// Set the pointer ap (argument pointer)
+                            // to the first not named argument
+                            // after format
 	for (string = format; *string; string++) {
 		if (*string != '%') {
 			putchar(*string);
 			continue;
 		}
-		// Getting precision before %f
+		// Getting precision before f or e
 		int index = 0;
 		while (isdigit(*++string)){
 			checkCapacityDynamicArray_char(s_precision, &capacity, index);

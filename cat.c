@@ -5,7 +5,7 @@
 int main(int argc, char *argv[]) {
 	FILE *f_pointer;
 	void filecopy(FILE *, FILE *);
-	char *prog_name = argv[0];			// Name of out program
+	char *prog_name = argv[0];			// Name of our programm
 
 	if (argc == 1) 		// No filename args => stdin
 		filecopy(stdin, stdout);
@@ -17,10 +17,10 @@ int main(int argc, char *argv[]) {
 			}
 			else {
 				#define MINUS_SPACE 45
-				for (int i; i < MINUS_SPACE; i++)
+				for (int i=0; i < MINUS_SPACE; i++)
 					putc('-', stdout);
 				printf("%s", *argv);
-				for (int i; i < MINUS_SPACE; i++)
+				for (int i=0; i < MINUS_SPACE; i++)
 					putc('-', stdout);
 				putc('\n', stdout);
 				filecopy(f_pointer, stdout);
@@ -28,8 +28,11 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	if (ferror(stdout));
-	return 0;
+	if (ferror(stdout)){
+        fprintf(stderr, "%s: error writing stdout\n", prog_name);
+        exit(2);
+    }
+	exit(0);
 }
 
 void filecopy(FILE *input_pointer, FILE *output_pointer) {
