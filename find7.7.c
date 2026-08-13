@@ -162,8 +162,8 @@ int scan_file(CONFIG *conf) {
         line_n++;
         if ( (strstr(line, conf->flag_pattern) != NULL) != conf->flag_except) {
             if (conf->flag_lines)
-                fprintf(stdout, "%d: ", line_n);
-            fprintf(stdout, "%s - %s", conf->flag_path, line);
+                fprintf(stdout, "\033[92m%d:\x1b[0m ", line_n);
+            fprintf(stdout, "\033[91m%s\x1b[0m - %s", conf->flag_path, line);
             found++;
         }
     }
