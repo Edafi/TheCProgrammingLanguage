@@ -31,7 +31,7 @@ bool is_file(CONFIG *);
 int main(int argc, char *argv[]) {
     int character, found = 0;
     size_t size = MAXLEN;
-    CONFIG config = {0, 0, 0, 0, calloc(size, sizeof(char*)), calloc(size, sizeof(char*))};
+    CONFIG config = {0, 0, 0, 0, calloc(size, sizeof(char)), calloc(size, sizeof(char))};
     
     while (--argc > 0 && **++argv == '-') {
         if (strcmp(*argv, "--pattern") == 0) {      // Copying flag_pattern
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 
 int scan_stdin(CONFIG *conf) {
     size_t size = MAXLEN;
-    char *line = calloc(size, sizeof(char*));
+    char *line = calloc(size, sizeof(char));
     int line_n = 0, found = 0;
     while (getline(&line, &size, stdin) > 0) {
         line_n++;
@@ -95,44 +95,44 @@ int scan_stdin(CONFIG *conf) {
 }
 
 bool is_directory (CONFIG *conf) {
-    struct dirent *entry;
     DIR *directory;
-
     directory = opendir(conf->flag_path);
-    if (directory == NULL)  {                    // Not directory
-        closedir(directory);
+    if (directory == NULL)                    // Not directory
         return false;  
-    }
-    else {
-        closedir(directory);
-        return true;
-    }
+    closedir(directory);
+    return true;
 }
 
 // TO DO: Fix recursive mode
 int scan_directory(CONFIG *conf) {
     struct dirent *entry;
-    DIR *directory;
+    DIR *directory = opendir(conf->flag_path);
+    if (!directory)
+        return 0;
     size_t size = MAXLEN;
-    char *path = calloc(size, sizeof(char*));
-    path = strcpy(path, conf->flag_path);
     int found = 0;
 
-    directory = opendir(conf->flag_path);
     while ( (entry = readdir(directory)) ) {
-        if ( conf->flag_path[strlen(conf->flag_path) - 1] != '/')
-            strcat(conf->flag_path, "/");
-        strcat(conf->flag_path, entry->d_name);
-        if ( is_file(conf) )
-            found += scan_file(conf);
-        else if ( conf->flag_recursive) {
-            if ( is_directory(conf) ) {
-                fprintf(stdout, "Hello from directory recursive\n");    
-                found += scan_directory(conf);
-            }
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry-> d_name, "..") == 0)
+            continue;
+        
+        char newpath[size];
+        snprintf(newpath, size, "%s/%s", conf->flag_path, entry->d_name);
+        
+        CONFIG newConf = *conf;
+        newConf.flag_path = newpath;
+        
+        //fprintf(stdout, "newpath: %s\n", newpath);
+        //fprintf(stdout, "conf: %s, newConf: %s\n", conf->flag_path, newConf.flag_path);
+
+        if (is_directory(&newConf)) {
+            if (conf->flag_recursive)
+                found += scan_directory(&newConf);   
         }
-        strcpy(conf->flag_path, path);
+        else if (is_file(&newConf)) 
+            found += scan_file(&newConf);
     }
+    closedir(directory);
     return found;
 }
 
@@ -149,12 +149,15 @@ bool is_file(CONFIG *conf) {
 }
 
 int scan_file(CONFIG *conf) {
-    FILE *file;
+    //fprintf(stdout, "Hello from scan_file\n");
+    FILE *file = fopen(conf->flag_path, "r");
+    if (!file) 
+        return 0;
+
     int found = 0, line_n = 0;
     size_t size = MAXLEN;
-    char *line = calloc(size, sizeof(char*));
+    char *line = calloc(size, sizeof(char));
 
-    file = fopen(conf->flag_path, "r");
     while (getline(&line, &size, file) > 0) {
         line_n++;
         if ( (strstr(line, conf->flag_pattern) != NULL) != conf->flag_except) {
@@ -164,5 +167,7 @@ int scan_file(CONFIG *conf) {
             found++;
         }
     }
+    free(line);
+    fclose(file);
     return found;
 }
