@@ -12,18 +12,17 @@
 typedef struct {
     bool flag_lines;            // print the flag_pattern on which line was found
     bool flag_except;           // print lines with out flag_pattern
-    bool flag_flag_recursive;        // recursivly opening directorys and scan files
+    bool flag_recursive;        // recursivly opening directorys and scan files
     bool flag_found;            // print the amount of found lines at end 
-    char *flag_pattern = calloc(MAXLINE, sizeof(char *));    // flag_pattern which we parse in input 
-    char *flag_path = calloc(MAXLINE, sizeof(char *));       // flag_path to the file
+    char *flag_pattern;         // flag_pattern which we parse in input 
+    char *flag_path;            // flag_path to the file
 } CONFIG;
 
 int scan_stdin(CONFIG *);
 int scan_directory(CONFIG *);
 bool is_directory(CONFIG *);
 int scan_file(CONFIG *);
-int is_file(CONFIG *);
-void print_stdin(CONFIG *, char*);
+bool is_file(CONFIG *);
 
 /*
     In main we are getting only flags for find (something like grep) 
@@ -31,17 +30,21 @@ void print_stdin(CONFIG *, char*);
 
 int main(int argc, char *argv[]) {
     int character, found = 0;
-    CONFIG config = {0, 0, 0, 0, "", ""};
+    size_t size = MAXLEN;
+    CONFIG config = {0, 0, 0, 0, calloc(size, sizeof(char*)), calloc(size, sizeof(char*))};
     
     while (--argc > 0 && **++argv == '-') {
-        if (strcmp(*argv, "--flag_pattern") == 0) {      // Copying flag_pattern
+        if (strcmp(*argv, "--pattern") == 0) {      // Copying flag_pattern
             config.flag_pattern = strcpy(config.flag_pattern, *++argv);
+            argc--;
+            // fprintf(stdout, "%s\n", config.flag_pattern);
         }
-        else if (strcmp(*argv, "--flag_path") == 0) {    // Copying flag_path
+        else if (strcmp(*argv, "--path") == 0) {    // Copying flag_path
+            argc--;
             config.flag_path = strcpy(config.flag_path, *++argv);
         }
-        else if (agrc > 0) {              
-            while (character = **++argv)
+        else if (argc > 0) {              
+            while (character = *++*argv)
                 switch (character){
                     case 'x':
                         config.flag_except = 1;
@@ -50,7 +53,7 @@ int main(int argc, char *argv[]) {
                         config.flag_lines = 1;
                         break;
                     case 'r':
-                        config.flag_flag_recursive = 1;
+                        config.flag_recursive = 1;
                         break;
                     case 'f':
                         config.flag_found = 1;
@@ -58,18 +61,19 @@ int main(int argc, char *argv[]) {
                         fprintf (stderr, "Error: invalid flags, allowed flags:\n\tx - except flag_pattern and find any other lines without it.");
                         argc = 0;
                         found = -1;
+                        return found;
                 }        
         }
     }
 
-    if (strcmp(config.flag_path, "") == 0)          // Input from stdin
-        found = scan_stdin(&config);
-    else {                                          // Input from file or dir
-        if (is_directory(config.flag_path)) {       // Directory
-            if (!config.flag_recursive) {
-                scan_directory (&config);
-            }
-        }
+    if (strcmp(config.flag_path, "") == 0){        // Input from stdin
+        found += scan_stdin(&config);
+    }
+    else {                                              // Input from file or dir
+        if (is_directory(&config))                      // Directory
+            found += scan_directory(&config);
+        else
+            found += scan_file(&config);
     }
     return found;
 }
@@ -77,11 +81,11 @@ int main(int argc, char *argv[]) {
 int scan_stdin(CONFIG *conf) {
     size_t size = MAXLEN;
     char *line = calloc(size, sizeof(char*));
-    int line_n, found = 0;
-    while (getline(&line, size, stdin) > 0) {
+    int line_n = 0, found = 0;
+    while (getline(&line, &size, stdin) > 0) {
         line_n++;
         if ( (strstr(line, conf->flag_pattern) != NULL) != conf->flag_except) {
-            if (conf->flag_line)
+            if (conf->flag_lines)
                 fprintf(stdout, "%d: ", line_n);
             fprintf(stdout, "%s", line);
             found++;
@@ -95,26 +99,70 @@ bool is_directory (CONFIG *conf) {
     DIR *directory;
 
     directory = opendir(conf->flag_path);
-    if (directory == NULL)                      // Not directory
+    if (directory == NULL)  {                    // Not directory
+        closedir(directory);
         return false;  
-    else
+    }
+    else {
+        closedir(directory);
         return true;
+    }
 }
 
-// TO DO: Do the concat for filename and directory name, change config->flag_pathand = config->flag_path + entry-> name and  push it in scan_file(config)
-int scan_directory(CONFIG *config) {
+// TO DO: Fix recursive mode
+int scan_directory(CONFIG *conf) {
     struct dirent *entry;
     DIR *directory;
-
+    size_t size = MAXLEN;
+    char *path = calloc(size, sizeof(char*));
+    path = strcpy(path, conf->flag_path);
     int found = 0;
 
-    directory = opendir(config->flag_path);
+    directory = opendir(conf->flag_path);
     while ( (entry = readdir(directory)) ) {
-        if (!config->flag_recursive) {
-            if (is_file(entry->d_name)) {
-                str
-                found += scan_file(entry->d_name);
+        if ( conf->flag_path[strlen(conf->flag_path) - 1] != '/')
+            strcat(conf->flag_path, "/");
+        strcat(conf->flag_path, entry->d_name);
+        if ( is_file(conf) )
+            found += scan_file(conf);
+        else if ( conf->flag_recursive) {
+            if ( is_directory(conf) ) {
+                fprintf(stdout, "Hello from directory recursive\n");    
+                found += scan_directory(conf);
             }
         }
+        strcpy(conf->flag_path, path);
     }
+    return found;
+}
+
+
+bool is_file(CONFIG *conf) {
+    FILE *file;
+    
+    if ( file = fopen(conf->flag_path, "r") )
+        return true;
+    else {
+        //fprintf(stderr, "Error, can't open file %s", conf->flag_path);
+        return false;
+    }
+}
+
+int scan_file(CONFIG *conf) {
+    FILE *file;
+    int found = 0, line_n = 0;
+    size_t size = MAXLEN;
+    char *line = calloc(size, sizeof(char*));
+
+    file = fopen(conf->flag_path, "r");
+    while (getline(&line, &size, file) > 0) {
+        line_n++;
+        if ( (strstr(line, conf->flag_pattern) != NULL) != conf->flag_except) {
+            if (conf->flag_lines)
+                fprintf(stdout, "%d: ", line_n);
+            fprintf(stdout, "%s - %s", conf->flag_path, line);
+            found++;
+        }
+    }
+    return found;
 }
