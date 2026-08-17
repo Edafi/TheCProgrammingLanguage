@@ -25,7 +25,7 @@ int main() {
     int file_descriptor;
 
     // The creat function recreate file if it exists, so it best IMHO use open with
-    // O_CREAT instead of open
+    // O_CREAT instead of creat
     //
     //file_descriptor = creat(file_name, 0777);
     //if (file_descriptor == -1)
@@ -35,7 +35,7 @@ int main() {
         
     file_descriptor = open(file_name, O_APPEND | O_RDWR | O_CREAT, 0777);
     fprintf(stdout, "file_descriptor = %d, file %s has been opened\n", file_descriptor, file_name);
-    FILE *file = fdopen(file_descriptor, "r+");
+    FILE *file = fdopen(file_descriptor, "r+");         // fdopen uses file descriptor to open a file 
     if (file == NULL) {
         fprintf(stderr, "Error: couldn't open a file %s\n", file_name);
         return 1;
