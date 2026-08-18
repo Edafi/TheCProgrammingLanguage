@@ -15,6 +15,11 @@ O_ASYNC	        Enable input and output control by signal.
 O_CLOEXEC	    Enable close-on-exec mode on the open file.
 O_NONBLOCK	    Disables blocking of the file opened.
 O_TMPFILE	    Create an unnamed temporary file at the specified path
+O_TRUNC         If the file already exists and is a regular file and the
+                access mode allows writing (i.e., is O_RDWR or O_WRONLY) it
+                will be truncated to length 0.  If the file is a FIFO or
+                terminal device file, the O_TRUNC flag is ignored.
+                Otherwise, the effect of O_TRUNC is unspecified.
 */
 
 extern int errno;
