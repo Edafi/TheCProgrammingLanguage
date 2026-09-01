@@ -11,13 +11,12 @@ int main(int argc, char *argv[]) {
     int file_descr;
     char *program_name = *argv;
     void filecopy(int , int);
-
     if (argc == 1)
         filecopy(0, 1);     // stdin is number 0, stdout is number 1
     else {
-        while (argc-- > 0) {
+        while (--argc > 0) {
             if ( (file_descr = open(*++argv, O_RDONLY)) < 0 ) {
-                fprintf(stderr, "Error: %s\n", strerror(errno));
+                fprintf(stderr, "Error: %s %s\n", *argv, strerror(errno));
                 exit(errno);
             }
             else {
@@ -41,9 +40,11 @@ int main(int argc, char *argv[]) {
 
 //  TO DO: make it work with file descriptors
 void filecopy(int input, int output) {
-	int bytes;
-    char buffer [BUFSIZ];
-	while ((bytes = read(input, buffer, BUFSIZ)) >0 )
-		write(output, buffer, BUFSIZ);
+    int bytes;
+    char buffer [BUFSIZ] = {' '};
+	while ((read(input, buffer, BUFSIZ)) >0) {
+        write(output, buffer, strlen(buffer));
+        memset(buffer, '\0', strlen(buffer)); 
+    }
 	//putc('\n', output_pointer);
 }
