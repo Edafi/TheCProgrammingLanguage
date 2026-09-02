@@ -11,18 +11,23 @@
   lseek() repositions the file offset of the open file description
   associated with the file descriptor fd to the argument offset
   according to the directive whence as follows:
-        
+
+        whence:
+        0 - start of file
+        1 - position of cursor in file
+        2 - end of file
+
         offset: 
         SEEK_SET
-              The file offset is set to offset bytes (beggining of the file + whence).
+              The file offset is set to offset bytes.
 
         SEEK_CUR
               The file offset is set to its current location plus offset
-              bytes (cursor position + whence).
+              bytes.
 
         SEEK_END
               The file offset is set to the size of the file plus offset
-              bytes (end of file + whence).
+              bytes.
 
 */
 int get (int, long, char*, int);
